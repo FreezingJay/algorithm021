@@ -76,4 +76,70 @@ public class Week1 {
         digits[0] = 1;
         return digits;
     }
+
+    /**
+     * 189. 旋转数组
+     * https://leetcode-cn.com/problems/rotate-array/
+     *
+     * @param nums
+     * @param k
+     */
+    public void rotate(int[] nums, int k) {
+        if (nums.length < 2) return;
+        k %= nums.length;
+        reverse(nums, 0, nums.length - 1);
+        reverse(nums, 0, k - 1);
+        reverse(nums, k, nums.length - 1);
+    }
+
+    public void reverse(int[] nums, int start, int end) {
+        while (start < end) {
+            int temp = nums[start];
+            nums[start++] = nums[end];
+            nums[end--] = temp;
+        }
+    }
+
+    /**
+     * 88. 合并两个有序数组
+     * https://leetcode-cn.com/problems/merge-sorted-array/
+     *
+     * @param nums1
+     * @param m
+     * @param nums2
+     * @param n
+     */
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int len1 = m - 1;
+        int len2 = n - 1;
+        int len = m + n - 1;
+        while (len1 >= 0 && len2 >= 0) {
+            nums1[len--] = nums1[len1] > nums2[len2] ? nums1[len1--] : nums2[len2--];
+        }
+        System.arraycopy(nums2, 0, nums1, 0, len2 + 1);
+    }
+
+    /**
+     * 21. 合并两个有序链表
+     * https://leetcode-cn.com/problems/merge-two-sorted-lists/
+     * @param l1
+     * @param l2
+     * @return
+     */
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        ListNode head = new ListNode(-1);
+        ListNode prev = head;
+        while(l1 != null && l2 != null){
+            if(l1.val < l2.val){
+                prev.next = l1;
+                l1 = l1.next;
+            } else {
+                prev.next = l2;
+                l2 = l2.next;
+            }
+            prev = prev.next;
+        }
+        prev.next = l1 == null? l2:l1;
+        return head.next;
+    }
 }
