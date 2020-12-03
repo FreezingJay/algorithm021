@@ -1,5 +1,7 @@
 package com.freezing.leetcode.jike;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -116,12 +118,15 @@ public class Week1 {
         while (len1 >= 0 && len2 >= 0) {
             nums1[len--] = nums1[len1] > nums2[len2] ? nums1[len1--] : nums2[len2--];
         }
-        System.arraycopy(nums2, 0, nums1, 0, len2 + 1);
+        for (int i = 0; i < len2 + 1; i++) {
+            nums1[i] = nums2[i];
+        }
     }
 
     /**
      * 21. 合并两个有序链表
      * https://leetcode-cn.com/problems/merge-two-sorted-lists/
+     *
      * @param l1
      * @param l2
      * @return
@@ -129,8 +134,8 @@ public class Week1 {
     public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
         ListNode head = new ListNode(-1);
         ListNode prev = head;
-        while(l1 != null && l2 != null){
-            if(l1.val < l2.val){
+        while (l1 != null && l2 != null) {
+            if (l1.val < l2.val) {
                 prev.next = l1;
                 l1 = l1.next;
             } else {
@@ -139,7 +144,33 @@ public class Week1 {
             }
             prev = prev.next;
         }
-        prev.next = l1 == null? l2:l1;
+        prev.next = l1 == null ? l2 : l1;
         return head.next;
+    }
+
+    /**
+     * 42. 接雨水
+     * https://leetcode-cn.com/problems/trapping-rain-water/
+     *
+     * @param height
+     * @return
+     */
+    public int trap(int[] height) {
+        int sum = 0;
+        Deque<Integer> stack = new ArrayDeque<>();
+        int current = 0;
+        while (current < height.length) {
+            while (!stack.isEmpty() && height[stack.peekLast()] < height[current]) {
+                int h = height[stack.pollLast()];
+                if (stack.isEmpty()) break;
+                int w = current - stack.peekLast() - 1;
+                int min = Math.min(height[current], height[stack.peekLast()]);
+                sum += w * (min - h);
+            }
+            stack.addLast(current);
+            current++;
+        }
+
+        return sum;
     }
 }
